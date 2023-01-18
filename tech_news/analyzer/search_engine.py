@@ -26,6 +26,7 @@ def search_by_tag(tag):
 # Requisito 9
 def search_by_category(category):
     news = []
-    for new in search_news({"category": {"$regex": category, "$options": "i"}}):
+    for new in search_news({"category": {"$regex": category,
+                           "$options": "i"}}):
         news.append((new['title'], new['url']))
     return news
