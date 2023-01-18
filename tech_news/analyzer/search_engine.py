@@ -1,4 +1,5 @@
 from tech_news.database import search_news
+from datetime import datetime
 
 
 # Requisito 6
@@ -11,7 +12,11 @@ def search_by_title(title):
 
 # Requisito 7
 def search_by_date(date):
-    """Seu código deve vir aqui"""
+    news = []
+    new_date = validate_date(date)
+    for new in search_news({"timestamp": {"$regex": new_date}}):
+        news.append((new['title'], new['url']))
+    return news
 
 
 # Requisito 8
@@ -19,7 +24,6 @@ def search_by_tag(tag):
     news = []
     for new in search_news({"tags": {"$regex": tag, "$options": "i"}}):
         news.append((new['title'], new['url']))
-        print(new)
     return news
 
 
@@ -30,3 +34,12 @@ def search_by_category(category):
                            "$options": "i"}}):
         news.append((new['title'], new['url']))
     return news
+
+
+def validate_date(date):
+    try:
+        verify = datetime.strptime(date, "%Y-%m-%d")
+        convert = verify.strftime("%d/%m/%Y")
+    except ValueError:
+        raise ValueError("Data inválida")
+    return convert
